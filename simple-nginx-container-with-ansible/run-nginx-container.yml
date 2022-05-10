@@ -1,0 +1,12 @@
+---
+- name: Create and run a nginx container with podman
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: run nginx
+      community.docker.docker_container:
+        name: nginx
+        image: nginx:latest
+        state: started
+        ports:
+          - "8080:80" 
