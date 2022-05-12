@@ -1,0 +1,17 @@
+---
+- name: PLEX service
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Create and run PLEX container 
+      community.docker.docker_container:
+        name: plex
+        image: lscr.io/linuxserver/plex:latest
+        volumes:
+          - "/opt/containers/plex/data:/config"
+        env:
+          PUID: "1000"
+          PGID: "1000"
+          VERSION: "latest"
+          PLEX_CLAIM: "claim-BWyYkbQtheuYXP_7ockv"
+        state: started
