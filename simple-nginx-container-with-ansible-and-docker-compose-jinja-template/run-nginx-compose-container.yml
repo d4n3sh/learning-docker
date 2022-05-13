@@ -1,0 +1,30 @@
+---
+- name: Create and run a nginx container with docker compose generated with Jinja2
+  hosts: all
+  gather_facts: no
+  vars:
+    container_name: nginx
+    container_image: nginx
+  tasks:
+
+    - name: Create application directory
+      become: yes
+      ansible.builtin.file:
+        path: /opt/containers/nginx/
+        state: directory
+        owner: 1000
+        group: 1000
+
+    - name: Setup compose file
+      become: yes
+      ansible.builtin.template:
+        src: files/docker-compose.yml.j2
+        dest: /opt/containers/nginx/docker-compose.yml
+        owner: 1000
+        group: 1000
+    
+    - name: Run nginx
+      community.docker.docker_compose:
+        project_src: /opt/containers/nginx/
+        remove_orphans: yes
+        state: present
